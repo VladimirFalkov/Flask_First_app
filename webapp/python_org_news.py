@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from flask import current_app
 
 def get_page(url):
     try:
@@ -11,7 +12,7 @@ def get_page(url):
         return False
     
 def get_python_news():
-    html = get_page('https://www.python.org/blogs/')
+    html = get_page(current_app.config('URL_FOR_NEWS'))
     if html:
             soup = BeautifulSoup(html, 'html.parser')
             all_news = soup.find('ul', class_="list-recent-posts menu").findAll('li')

@@ -4,9 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
 requests = "*"
 beautifulsoup4 = "*"
+flask = "==2.1.2"
+flask-sqlalchemy = "==2.5.1"
+sqlalchemy = "==1.4.37"
 
 [dev-packages]
 
