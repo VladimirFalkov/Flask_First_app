@@ -26,12 +26,14 @@ def get_python_news():
                 published = datetime.strptime(published, "%Y-%m-%d")
             except ValueError:
                 published = datetime.now()
-            print(title, url, published)
             save_news(title, url, published)
 
 
 def save_news(title, url, published):
-    news_news = News(title=title, url=url, published=published)
-    db.session.add(news_news)
-    db.session.commit()
+    # saved news in DB
+    news_exist = News.query.filter(News.url==url).count()
+    if not news_exist:
+        news_news = News(title=title, url=url, published=published)
+        db.session.add(news_news)
+        db.session.commit()
         
