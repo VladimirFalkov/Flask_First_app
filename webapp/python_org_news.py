@@ -14,24 +14,24 @@ def get_page(url):
         return False
     
 def get_python_news():
-    html = get_page(current_app.config('URL_FOR_NEWS'))
+    html = get_page("https://www.python.org/blogs/")
     if html:
-            soup = BeautifulSoup(html, 'html.parser')
-            all_news = soup.find('ul', class_="list-recent-posts menu").findAll('li')
-            result_news = []
-            for news in all_news:
-                title = news.find('a').text
-                url = news.find('a')['href']
-                published = news.find('time').text
-                try:
-                    published = datetime.strptime(published,' %Y-%m-%d')
-                except ValueError:
-                     puplished = datetime.now()
-                save_news(title, url, published)
-    return False   
+        soup = BeautifulSoup(html, 'html.parser')
+        all_news = soup.find('ul', class_="list-recent-posts menu").findAll('li')
+        for news in all_news:
+            title = news.find('a').text
+            url = news.find('a')['href']       
+            published = news.find('time').text
+            try:
+                published = datetime.strptime(published, "%Y-%m-%d")
+            except ValueError:
+                published = datetime.now()
+            print(title, url, published)
+            save_news(title, url, published)
 
 
 def save_news(title, url, published):
-     news_news = News(title=title, url=url, published=published)
-     db.session.add(news_news)
-     db.session.commit()
+    news_news = News(title=title, url=url, published=published)
+    db.session.add(news_news)
+    db.session.commit()
+        
