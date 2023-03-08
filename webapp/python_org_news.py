@@ -1,3 +1,4 @@
+from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 from flask import current_app
@@ -21,6 +22,10 @@ def get_python_news():
                 title = news.find('a').text
                 url = news.find('a')['href']
                 published = news.find('time').text
+                try:
+                    published = datetime.strptime(published,' %Y-%m-%d')
+                except ValueError:
+                     puplished = datetime.now()
                 result_news.append(
                     {
                     'title': title,
