@@ -28,9 +28,9 @@ def get_python_news():
                 published = datetime.now()
             save_news(title, url, published)
 
-
+# This function saved news in DB
 def save_news(title, url, published):
-    # saved news in DB
+    # Lets check if news is new and if it is - add it to DB
     news_exist = News.query.filter(News.url==url).count()
     if not news_exist:
         news_news = News(title=title, url=url, published=published)
