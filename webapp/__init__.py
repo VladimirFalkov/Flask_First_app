@@ -15,7 +15,7 @@ def create_app():
         return render_template('index.html', page_title=title, weather=weather, news_list = news_list)
     
     @app.route('/login')
-    def login()
+    def login():
         title = 'Авторизация'
         login_form = LoginForm()
         return render_template('login.html', page_title=title, form=login_form)
