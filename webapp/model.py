@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 
@@ -23,7 +23,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(128))
     role = db.Column(db.String(10), index=True)
 
-    def set_password(self, password)
+    def set_password(self, password):
         self.password = generate_password_hash(password)
 
     def check_password(self, password):
