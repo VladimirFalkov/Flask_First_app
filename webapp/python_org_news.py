@@ -2,7 +2,8 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 from flask import current_app
-from webapp.model import db, News
+from webapp.db import db
+from webapp.news.models import News
 
 def get_page(url):
     try:
