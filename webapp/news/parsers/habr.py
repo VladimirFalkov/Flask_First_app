@@ -1,11 +1,32 @@
 from datetime import datetime
-import requests
+from datetime import timedelta
+import locale
+import platform
 from bs4 import BeautifulSoup
-from flask import current_app
 from webapp.db import db
 from webapp.news.models import News
 
 from webapp.news.parsers.utils import save_news, get_page
+
+
+if platform.system() == 'Windows':
+    locale.setlocale(locale.LC_ALL, 'russian')
+else:
+    locale.setlocale(locale.LC_TIME, 'ru_RU')
+
+def parse_habr_time(date_str):
+       
+    if 'сегодня' in date_str.lower():
+        today = datetime.now()
+        date_str = date_str.lower().replace('сегодня', today.strftime('%d %B %Y'))
+    elif 'вчера' in date_str.lower():
+        yestarday = datetime.now() - timedelta(days=1)
+        date_str = date_str.lower().replace('вчера', yestarday.strftime('%d %B %Y'))
+    try: 
+        return datetime.strptime(date_str, '%d %B %Y в %H:%M')
+    except ValueError:
+        return datetime.now()
+    
 
 
 def get_python_habr_snippets():
@@ -17,14 +38,5 @@ def get_python_habr_snippets():
             title = news.find('h2').find('span').text
             url = 'https://habr.com' + news.find('a', class_="tm-article-snippet__title-link")['href']       
             published = news.find('time').text
-            
-            print(title)
-            print(url)
-            print(published)
-            print('-------------------------------------------')
-            
-            """try:
-                published = datetime.strptime(published, "%Y-%m-%d")
-            except ValueError:
-                published = datetime.now()
-            save_news(title, url, published)"""
+            published = parse_habr_time(published)
+            save_news(title, url, published)
