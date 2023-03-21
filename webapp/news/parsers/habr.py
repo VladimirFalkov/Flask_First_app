@@ -46,7 +46,12 @@ def get_python_habr_snippets():
 def get_news_content():
     news_without_text = News.query.filter(News.text.is_(None))
     for news in news_without_text:
-        html = get_html(news.url)
+        print(news)
+        html = get_page(news.url)
         if html:
            soup = BeautifulSoup(html, 'html.parser')
-           new_text = soup.find()
+           news_text = soup.find('div', class_="pull-down").find('article', class_="tm-article-presenter__content tm-article-presenter__content_narrow").find('div',class_="tm-article-body").decode_contents()
+           if news_text:
+               news.text = news_text
+               db.session.add(news)
+               db.session.commit()
