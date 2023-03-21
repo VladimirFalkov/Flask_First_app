@@ -8,11 +8,11 @@ blueprint = Blueprint('news', __name__)
 def index():
     title = 'Новости Питон'
     weather = {'temp_C': 11, 'FeelsLikeC':16 }
-    news_list = News.query.order_by(News.published.desc()).all()
+    news_list = News.query.filter(News.text.isnot(None)).order_by(News.published.desc()).all()
     return render_template('news/index.html', page_title=title, weather=weather, news_list = news_list)
 
 
-@blueprint.route('/news/<int:news_id')
+@blueprint.route('/news/<int:news_id>')
 def single_news(news_id):
     my_news = News.query.filter(News.id == news_id).first()
 
