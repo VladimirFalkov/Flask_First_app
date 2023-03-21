@@ -1,5 +1,6 @@
 from datetime import datetime
 from datetime import timedelta
+import requests
 import locale
 import platform
 from bs4 import BeautifulSoup
@@ -40,3 +41,12 @@ def get_python_habr_snippets():
             published = news.find('time').text
             published = parse_habr_time(published)
             save_news(title, url, published)
+
+
+def get_news_content():
+    news_without_text = News.query.filter(News.text.is_(None))
+    for news in news_without_text:
+        html = get_html(news.url)
+        if html:
+           soup = BeautifulSoup(html, 'html.parser')
+           new_text = soup.find()
