@@ -46,7 +46,6 @@ def get_python_habr_snippets():
 def get_news_content():
     news_without_text = News.query.filter(News.text.is_(None))
     for news in news_without_text:
-        print(news)
         html = get_page(news.url)
         if html:
            soup = BeautifulSoup(html, 'html.parser')
