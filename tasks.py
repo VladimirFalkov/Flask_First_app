@@ -2,6 +2,7 @@ from celery import Celery
 
 from webapp import create_app
 from webapp.news.parsers import habr
+from celery.schedules import crontab
 
 
 flask_app = create_app()
@@ -16,3 +17,9 @@ def habr_snippets():
 def habr_content():
     with flask_app.app_context():
         habr.get_news_content()
+
+
+@celery_app.on_after_configure.connect
+def setup_periodic_task(sender, **kwargs):
+    sender.add_periodic_task(crontab(minute='*/3'), habr_snippets.s())
+    sender.add_periodic_task(crontab(minute='*/3'), habr_content.s())
